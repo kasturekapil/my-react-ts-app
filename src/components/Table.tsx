@@ -13,6 +13,7 @@ export default function BaggageTable(props: { data: MissingBags[] }) {
           <Table.ColumnHeaderCell>Country</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Total Bags</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Flight Number</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Booking Reference</Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
 
@@ -23,6 +24,7 @@ export default function BaggageTable(props: { data: MissingBags[] }) {
             <Table.Cell>{row.country}</Table.Cell>
             <Table.Cell>{row.numberBags}</Table.Cell>
             <Table.Cell>{row.flightNumber}</Table.Cell>
+            <Table.Cell>{row.bookingReference}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>

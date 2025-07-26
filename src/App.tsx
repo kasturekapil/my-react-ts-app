@@ -50,6 +50,7 @@ export interface MissingBags {
   country: string;
   numberBags: string;
   flightNumber: string;
+  bookingReference: string; // Optional field for booking reference
 }
 
 const defaultFormData: MissingBags = {
@@ -57,6 +58,7 @@ const defaultFormData: MissingBags = {
   country: "",
   numberBags: "",
   flightNumber: "",
+  bookingReference: "",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -109,7 +111,9 @@ export default function Page() {
 
   return (
     <>
-      <h3>Live Coding - Report Missing Baggage</h3>
+      <Heading mb="5" align="center">
+        Live Coding - Report Missing Baggage
+      </Heading>
       {/* Form */}
       <form onSubmit={handleSubmit}>
         <Card>
@@ -135,6 +139,16 @@ export default function Page() {
                 value={formData.country}
                 setValue={(country: string) =>
                   setFormData((prev) => ({ ...prev, country }))
+                }
+              />
+            </>
+            <>
+              <Field
+                label="Booking Reference (PNR)"
+                placeholder="A 6-character code you received during flight booking"
+                value={formData.bookingReference}
+                setValue={(bookingReference: string) =>
+                  setFormData((prev) => ({ ...prev, bookingReference }))
                 }
               />
             </>
@@ -172,8 +186,8 @@ export default function Page() {
       </p>
 
       {/* Table */}
-      <Heading mb="2" mt="4">
-        Missing bags
+      <Heading mb="5" mt="4">
+        Lost Baggage Records
       </Heading>
       <BaggageTable data={[]} />
     </>

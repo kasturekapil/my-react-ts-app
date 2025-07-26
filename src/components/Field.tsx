@@ -19,7 +19,7 @@ const Field: React.FC<FieldProps> = ({
 }) => {
   return (
     <>
-      <Text as="label" size="2" weight="regular">
+      <Text as="label" size="2" weight="bold">
         {label}
       </Text>
       <TextField.Root
