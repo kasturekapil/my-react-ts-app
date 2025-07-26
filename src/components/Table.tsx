@@ -1,7 +1,7 @@
 "use client";
 
 import { Table } from "@radix-ui/themes";
-import { MissingBags } from "../Page";
+import { MissingBags } from "../App";
 
 export default function BaggageTable(props: { data: MissingBags[] }) {
   const { data } = props;

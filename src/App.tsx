@@ -19,17 +19,25 @@ import Field from "./components/Field";
 
 /**
  * TASKS
- *
- * 1. Debug <Table> not rendering data
- * 2. Update saveCustomerBaggage() to save the data to the API
- *    - endpoint: /api/baggage
+ * 1. Fix the base url issue for the GET API request
+ *    - Use the environment variable VITE_API_BASE_URL
+ * 2. Debug <Table> not rendering data
+ * 3. Update saveCustomerBaggage() to save the data to the API
+ *    - endpoint: /user/baggage
  *    - method: POST
- * 3. Table should be populated with the data from the API
- * 4. Prevent Duplicate entries.
+ * 4. Make sure not to submit empty form
+ *    - All fields are required
+ * 5. After successful submission, reset the form
+ * 6. Table should be populated with data
+ *     - latest data from the API, without needing to refresh the page
+ *     - sort the table by flight number, before rendering
+ *       (flight number should be sorted in ascending order)
+ * 7. Prevent Duplicate entries.
  *    - Before calling saveCustomerBaggage(),
  *      check if name AND flight number in form entry already exists in tableData
  *    - If it does, show an error message below the form. (erorr message should be hidden by default)
- * 5. The submit button should be disabled whilst submitting
+ * 8. The submit button should be disabled whilst submitting
+ * 9. Identify and Make sure to use performance optimizations like useCallback, useMemo, etc. where appropriate
  *
  */
 
@@ -48,33 +56,26 @@ const defaultFormData: MissingBags = {
   flightNumber: "",
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function Page() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [tableData, setTableData] = useState<MissingBags[]>([]);
   const [formData, setFormData] = useState<MissingBags>(defaultFormData);
-  const [isErrorVisible, setIsErrorVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [formErrors, setFormErrors] = useState({
-    name: "",
-    country: "",
-    numberBags: "",
-    flightNumber: "",
-  });
+  //Please add the upcoming state from here only
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(
-          "https://67f61175913986b16fa68213.mockapi.io/api/baggage/users",
-          { method: "GET" }
-        );
+        const response = await fetch("/user/baggage", { method: "GET" });
         if (!response.ok) {
           console.error(
             `Error fetching data: ${response.status} ${response.statusText}`
           );
           throw new Error("Error occurred while fetching data");
         }
-        const data = await response.json();
-        setTableData(data);
+        //Please add the appropriate code to set table data
       } catch (error) {
         console.error("Failed to fetch baggage data:", error);
       }
@@ -83,93 +84,14 @@ export default function Page() {
     getData();
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const saveCustomerBaggage = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        "https://67f61175913986b16fa68213.mockapi.io/api/baggage/users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-      if (!response.ok) {
-        console.error(`Error with ${response.status} ${response.statusText}`);
-        throw new Error("Error occurred while saving data");
-      }
-      const data = await response.json();
-      setTableData((prev) => [...prev, data]);
-    } catch (error) {
-      console.error("Failed to save baggage data:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    //Please add the code to save the customer baggage here (POST request)
   };
 
-  const isDuplicateEntry = (entry: MissingBags, data: MissingBags[]) => {
-    const normalize = (item: string) => item.trim().toLowerCase();
-    return data.some(
-      (item) =>
-        normalize(item.name) === normalize(entry.name) &&
-        normalize(item.flightNumber) === normalize(entry.flightNumber)
-    );
-  };
-
-  const validateForm = () => {
-    const error: typeof formErrors = {
-      name: "",
-      country: "",
-      numberBags: "",
-      flightNumber: "",
-    };
-
-    let isValid = true;
-
-    if (!formData.name.trim()) {
-      error.name = "Name is required";
-      isValid = false;
-    }
-
-    if (!formData.country.trim()) {
-      error.country = "country is required";
-      isValid = false;
-    }
-
-    if (!formData.flightNumber.trim()) {
-      error.flightNumber = "Flight number is required";
-      isValid = false;
-    }
-
-    const bagCount = parseInt(formData.numberBags);
-
-    if (!formData.numberBags || isNaN(bagCount) || bagCount < 0) {
-      error.numberBags = "Enter a valid number greater than 0";
-      isValid = false;
-    }
-
-    setFormErrors(error);
-    return isValid;
-  };
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    if (isDuplicateEntry(formData, tableData)) {
-      setIsErrorVisible(true);
-    } else {
-      setIsErrorVisible(false);
-      await saveCustomerBaggage();
-      setFormData(defaultFormData);
-      setFormErrors({
-        name: "",
-        country: "",
-        numberBags: "",
-        flightNumber: "",
-      });
-    }
+    //Please add the code to handle form submission here
   };
 
   return (
@@ -192,11 +114,6 @@ export default function Page() {
                   setFormData((prev) => ({ ...prev, name }))
                 }
               />
-              {formErrors.name && (
-                <Text as="label" size="2" style={{ color: "red" }}>
-                  {formErrors.name}
-                </Text>
-              )}
             </>
             <>
               <Field
@@ -207,11 +124,6 @@ export default function Page() {
                   setFormData((prev) => ({ ...prev, country }))
                 }
               />
-              {formErrors.country && (
-                <Text as="label" size="2" style={{ color: "red" }}>
-                  {formErrors.country}
-                </Text>
-              )}
             </>
             <>
               <Field
@@ -222,11 +134,6 @@ export default function Page() {
                   setFormData((prev) => ({ ...prev, numberBags }))
                 }
               />
-              {formErrors.numberBags && (
-                <Text as="label" size="2" style={{ color: "red" }}>
-                  {formErrors.numberBags}
-                </Text>
-              )}
             </>
 
             <>
@@ -238,32 +145,24 @@ export default function Page() {
                   setFormData((prev) => ({ ...prev, flightNumber }))
                 }
               />
-              {formErrors.flightNumber && (
-                <Text as="label" size="2" style={{ color: "red" }}>
-                  {formErrors.flightNumber}
-                </Text>
-              )}
             </>
-            <Button type="submit" disabled={isLoading}>
-              Add missing bag(s)
-            </Button>
+            <Button type="submit">Add missing bag(s)</Button>
           </Flex>
         </Card>
       </form>
-      {isErrorVisible && (
-        <p>
-          Error:{" "}
-          <Text as="label" size="2" style={{ color: "red" }}>
-            Name already exists
-          </Text>
-        </p>
-      )}
+
+      <p>
+        Error:
+        <Text as="label" size="2" style={{ color: "red" }}>
+          Name already exists
+        </Text>
+      </p>
 
       {/* Table */}
       <Heading mb="2" mt="4">
         Missing bags
       </Heading>
-      <BaggageTable data={tableData} />
+      <BaggageTable data={[]} />
     </>
   );
 }

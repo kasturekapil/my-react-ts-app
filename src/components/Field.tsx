@@ -7,6 +7,7 @@ interface FieldProps {
   placeholder?: string;
   value: string;
   setValue: (value: string) => void;
+  required?: boolean;
 }
 
 const Field: React.FC<FieldProps> = ({
@@ -14,6 +15,7 @@ const Field: React.FC<FieldProps> = ({
   placeholder = "",
   value,
   setValue,
+  required = false,
 }) => {
   return (
     <>
@@ -26,6 +28,7 @@ const Field: React.FC<FieldProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        required={required}
       />
     </>
   );
