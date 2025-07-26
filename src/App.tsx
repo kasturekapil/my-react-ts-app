@@ -14,6 +14,7 @@ import Field from "./components/Field";
  * Can use Google
  * Ask questions
  * No AI assistance (ChatGPT, Copilot, ...)
+ * Add proper typescript types wherever possible
  *
  */
 
@@ -34,6 +35,7 @@ import Field from "./components/Field";
  *     - sort the table by flight number, before rendering
  *       (flight number should be sorted in ascending order)
  * 7. Prevent Duplicate entries.
+ *    - Update isDuplicate function to check for duplicates
  *    - Before calling saveCustomerBaggage(),
  *      check if name AND flight number in form entry already exists in tableData
  *    - If it does, show an error message below the form. (erorr message should be hidden by default)
@@ -91,18 +93,28 @@ export default function Page() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const isDuplicate = () => {
+    // Check if the entry already exists in the data
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const sortTableData = () => {
+    // Sort the data by flight number in ascending order
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = async (e: React.FormEvent) => {
     //Please add the code to handle form submission here
   };
 
   return (
     <>
-      <h3>TCS Hands On - Missing Baggage Form</h3>
+      <h3>Live Coding - Add Missing Baggage</h3>
       {/* Form */}
       <form onSubmit={handleSubmit}>
         <Card>
           <Heading mb="5" align="center">
-            Add missing bag
+            Add Missing Bag's
           </Heading>
 
           <Flex direction="column" gap="3">
