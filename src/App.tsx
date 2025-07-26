@@ -109,12 +109,12 @@ export default function Page() {
 
   return (
     <>
-      <h3>Live Coding - Add Missing Baggage</h3>
+      <h3>Live Coding - Report Missing Baggage</h3>
       {/* Form */}
       <form onSubmit={handleSubmit}>
         <Card>
           <Heading mb="5" align="center">
-            Add Missing Bag's
+            Enter Bag Information
           </Heading>
 
           <Flex direction="column" gap="3">
